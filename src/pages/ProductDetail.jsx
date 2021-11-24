@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router'
-import { Button, Card, Image } from 'semantic-ui-react'
+import { Button, Card } from 'semantic-ui-react'
 import ProductService from '../services/productService'
 
 export default function ProductDetail() {
@@ -12,7 +12,7 @@ export default function ProductDetail() {
             .then(result => {
                 setProduct(result.data.data)
             })
-    }, [])
+    }, []);
     return (
         <div>
             <Card.Group>
