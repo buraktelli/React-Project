@@ -3,25 +3,31 @@ import { Link } from 'react-router-dom'
 import { Button, Icon, Menu, Table } from 'semantic-ui-react'
 import ProductService from '../services/productService'
 import { useDispatch } from 'react-redux'
-import { addToCart } from '../store/actions/cartActions'
+import { addToCart, getProductList } from '../store/actions/cartActions'
 import { toast } from 'react-toastify'
 
-export default function ProductList() {
+import { connect } from 'react-redux'
+
+const ProductList = props => {
 
     const dispatch = useDispatch()
 
-    const [products, setProducts] = useState([])
+    // const [products, setProducts] = useState([])
     useEffect(() => {
-        let productService = new ProductService()
-        productService.getProducts()
-            .then(result => setProducts(result.data.data))
+        // let productService = new ProductService()
+        // productService.getProducts()
+        //     .then(result => setProducts(result.data.data))
+
+        props.getProductList();
+        // return (
+
+        // )
     }, [])
 
     const handleAddToCart = (product) => {
         dispatch(addToCart(product))
         toast.success(`${product.productName} sepete eklendi !`)
     }
-
     return (
         <div>
             <Table celled>
@@ -38,7 +44,7 @@ export default function ProductList() {
 
                 <Table.Body>
                     {
-                        products.map(product => (
+                        props.products.map(product => (
                             <Table.Row key={product.id}>
                                 <Table.Cell><Link to={`/products/${product.productName}`}>{product.productName}</Link></Table.Cell>
                                 <Table.Cell>{product.unitPrice}</Table.Cell>
@@ -77,3 +83,11 @@ export default function ProductList() {
         </div>
     )
 }
+
+const mapStateProps = state => {
+    return {
+        products: state.cart.products
+    }
+}
+
+export default connect(mapStateProps, { getProductList })(ProductList);
